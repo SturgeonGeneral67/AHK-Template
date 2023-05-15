@@ -24,8 +24,8 @@ Menu, Tray, Icon, wmploc.dll, 99 		 ; Local White Star tray Icon.
 ; =============== Auto-Execute End ==================
 ; ===================================================
 
-; … … … … … … … … … … … … … … … … … … … …  
-^T:: 	 ; … …  (Ctrl + T) 		‴‴ HOTKEY-TRIGGER ‴‴
+; … … … …  HOTKEY-TRIGGER … … … … … … … … … 
+^T:: 	 ; … …  (Ctrl + T) 
   Gosub, IndicateDot1
 Gui, Color, LIME 		 ; <<<<-----IndicateDot Color.
   Gosub, IndicateDot2
