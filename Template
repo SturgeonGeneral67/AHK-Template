@@ -25,8 +25,11 @@ Menu, Tray, Icon, wmploc.dll, 99 		 ; Local White Star tray Icon.
 ; ===================================================
 
 ; … … … … … … … … … … … … … … … … … … … …  
-
 ^T:: 	 ; … …  (Ctrl + T) 		‴‴ HOTKEY-TRIGGER ‴‴
+  Gosub, IndicateDot1
+Gui, Color, LIME 		 ; <<<<-----IndicateDot Color.
+  Gosub, IndicateDot2
+; … … … … … … … … … … … … … … … … … … … …  
 
 
 ; CODE HERE
@@ -49,7 +52,9 @@ if (A_TimeSincePriorHotkey > 250)
     TapCount++
     if (TapCount = 2) 	 ; <<<<---- Set TapCount to # of key taps wanted.
     {
-    SoundBeep, 2200, 75
+  Gosub, IndicateDot1
+Gui, Color, YELLOW 		 ; <<<<-----IndicateDot Color.
+  Gosub, IndicateDot2
         Reload
 } else {
         KeyWait, Esc
@@ -68,7 +73,9 @@ if (A_TimeSincePriorHotkey > 250)
     TapCount++
     if (TapCount = 3) 	 ; <<<<---- Set TapCount to # of key taps wanted.
     {
-    SoundBeep, 2200, 75
+  Gosub, IndicateDot1
+Gui, Color, RED 		 ; <<<<-----IndicateDot Color.
+  Gosub, IndicateDot2
         Gui, Destroy
         ExitApp
 } else {
@@ -86,7 +93,40 @@ FileGetTime, currentModTime, %A_ScriptFullPath%
 ; … … … … If the modification timestamp has changed, reload the script.
     if  (oldModTime = currentModTime) Or (oldModTime = "")
         Return
+  Gosub, IndicateDot1
+Gui, Color, BLUE 		 ; <<<<-----IndicateDot Color.
+  Gosub, IndicateDot2
 Reload
+
+; … … … …  SCRIPT GoSubs  … … … … … … … … … … 
+
+IndicateDot1:
+Gui, Destroy
+SysGet, MonitorWorkArea, MonitorWorkArea
+SysGet, TaskbarPos, 4
+Gui, +AlwaysOnTop -Caption +hwndHGUI +LastFound
+Return
+
+; … … … … … … … … … … … … … 
+
+IndicateDot2:
+Gui, Margin, 13, 13 		 ; <<<<-----Dot Size.
+Gui, Show, Hide
+WinGetPos, , , WinWidth, WinHeight, ahk_id %HGUI%
+NewX := MonitorWorkAreaRight - 80
+NewY := MonitorWorkAreaBottom - WinHeight - 5
+R := Min(WinWidth, WinHeight) // 1 	 ; <<<<-----  Set value of cornering. (0.5=Oval, 0=square, 1= round, 5=rounded corners).
+WinSet, Region, 0-0 W%WinWidth% H%WinHeight% R%R%-%R%
+Gui, Show, x%NewX% y%NewY%
+SoundGet, master_volume
+SoundSet, 7
+Soundbeep, 2100, 100
+SoundSet, % master_volume
+Sleep, 500
+Gui, Destroy
+Return
+
+; … … … … … … … … … … … … … … … … … … … … … 
 
 ; ===================================================
 ; ==================== Script End ===================
